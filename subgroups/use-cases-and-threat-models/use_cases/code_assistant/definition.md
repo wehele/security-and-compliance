@@ -6,17 +6,9 @@ Diagram (draw.io): ![Diagram](./diagram/ai_code_generator_threat_model_diagram_u
 
 [Edit this diagram (draw.io XML)](./diagramm/ai_code_generator_threat_model_diagram_updated_2026_05_12.drawio)
 
-### Logical boundries
+The following taxonomy is aligned to CycloneDX 1.7/2.0+ (https://cyclonedx.org/docs/1.7/json/#metadata_tools_oneOf_i0_components_items_type).
 
-Used to describe the control zones of an organization relative to the usecases of the org.
-
-- **Internal**  
-  Systems, APIs, or infrastructure owned and operated within the organization’s environment—generally more trusted but still pose risks such as misconfigurations, lateral movement, and insider threats.
-
-- **External**  
-  Third-party systems or services outside the organization’s control (e.g., SaaS, APIs, cloud providers)—introduce additional risks including supply chain vulnerabilities, data exposure, and limited visibility or control over security practices.
-
-### Actors
+### Parties/Roles (Actors)
 
 Humans or services that take action
 
@@ -29,22 +21,40 @@ Humans or services that take action
 - **Code Assistant Agent (Dynamic Code) (local/Remote)**
   An AI model within the agentic framework that combines reasoning and tool interaction capabilities to orchestrate multi-step workflows, invoke external services, and coordinate with the broader agent ecosystem. In threat modeling it is treated as an active actor with an expanded blast radius relative to its static counterpart—its autonomous, multi-tool operation makes it susceptible to prompt injection, workflow hijacking, and cascading misuse of integrated systems.
 
-### Data
+### Components
+
+#### Groups
+
+Used to describe the control zones of an organization relative to the usecases of the org.
+
+- **Internal**  
+  Systems, APIs, or infrastructure owned and operated within the organization’s environment—generally more trusted but still pose risks such as misconfigurations, lateral movement, and insider threats.
+
+- **External**  
+  Third-party systems or services outside the organization’s control (e.g., SaaS, APIs, cloud providers)—introduce additional risks including supply chain vulnerabilities, data exposure, and limited visibility or control over security practices.
+
+#### Data
 
 Data at rest or data in motion
 
 - **Code Assistant Plugin**  
   A compromised or intentionally malicious AI-powered IDE plugin that appears to assist with coding but performs unauthorized actions—introducing risks such as data exfiltration, credential harvesting, backdoor insertion, or manipulation of code and outputs.  
 
-### Components
+- **Local codebase clone**  
+  A developer’s local copy of a repository—treated as a sensitive asset since it may contain proprietary code, secrets, or configurations that could be exposed if the endpoint is compromised.
 
-Software or services
+- **Context**
+  TBC
+
+- **RAG data**
+  TBC
+
+#### Applications
 
 - **IDE (Integrated Development Environment)**  
   The software environment (e.g., VS Code, IntelliJ) where code is written and tested—an attack surface due to risks like malicious extensions, insecure settings, or credential exposure.
 
-- **Local codebase clone**  
-  A developer’s local copy of a repository—treated as a sensitive asset since it may contain proprietary code, secrets, or configurations that could be exposed if the endpoint is compromised.
+#### TBC
 
 - **Authentication (Authn)**  
   The service for verifying the identity of a user or system (e.g., passwords, tokens, MFA)—risks include credential theft, weak authentication mechanisms, and session hijacking.
@@ -67,7 +77,7 @@ Software or services
 - **Context Store (local/Remote)**  
   A data store that supplies structured or unstructured content to the model or retrieval pipeline to enrich responses. Risks include unauthorized access to sensitive stored content, poisoning of the data corpus, and data leakage via model outputs.
 
-- **Rag (local/Remote)**  
+- **RAG (local/Remote)**  
   A component that dynamically fetches relevant content from available data sources to augment the model's context and improve response quality. Introduces risks around ingestion of untrusted or manipulated content, exposure of sensitive data through retrieval, and injection of malicious inputs that propagate into model outputs.
 
 - **MCP Server — Cloud Service (e.g. AWS, GCP)**  
