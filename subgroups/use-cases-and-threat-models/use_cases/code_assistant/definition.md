@@ -23,7 +23,7 @@ Humans or services that take action
 
 ## Components
 
-### Groups
+### Group
 
 Used to describe the control zones of an organization relative to the usecases of the org.
 
@@ -40,36 +40,42 @@ Data at rest or data in motion
 - **Code Assistant Plugin**  
   A compromised or intentionally malicious AI-powered IDE plugin that appears to assist with coding but performs unauthorized actions—introducing risks such as data exfiltration, credential harvesting, backdoor insertion, or manipulation of code and outputs.  
 
-- **Local codebase clone**  
+- **Local Codebase clone**  
   A developer’s local copy of a repository—treated as a sensitive asset since it may contain proprietary code, secrets, or configurations that could be exposed if the endpoint is compromised.
 
-- **Context Store (local/Remote)**  
-  A data store that supplies structured or unstructured content to the model or retrieval pipeline to enrich responses. Risks include unauthorized access to sensitive stored content, poisoning of the data corpus, and data leakage via model outputs.
+- **Local Context Store**  
+  A locally hosted data store that supplies structured or unstructured content to the model or retrieval pipeline to enrich responses. Risks include unauthorized access to sensitive stored content, poisoning of the data corpus, and data leakage via model outputs.
 
-- **RAG data**
+- **Remote Context Store**  
+  A remotely hosted data store that supplies structured or unstructured content to the model or retrieval pipeline to enrich responses. Risks include unauthorized access to sensitive stored content, poisoning of the data corpus, and data leakage via model outputs.
+
+- **RAG data**  
   TBC
 
-### Applications
+### Application
 
-- **IDE (Integrated Development Environment)**  
+- **Integrated Development Environment (IDE)**  
   The software environment (e.g., VS Code, IntelliJ) where code is written and tested—an attack surface due to risks like malicious extensions, insecure settings, or credential exposure.
 
-- **Authentication (Authn)**  
+- **Authentication Service**  
   The service for verifying the identity of a user or system (e.g., passwords, tokens, MFA)—risks include credential theft, weak authentication mechanisms, and session hijacking.
 
-- **Authorization (Authz)**  
+- **Authorization Service**  
   The service for determining what an authenticated user or system is allowed to access or perform—risks include excessive permissions, privilege escalation, and misconfigured access controls.
 
-- **MCP Server — Third Party Service (e.g. Jira, GitHub)**
+- **Third Party MCP Server**
   An organization-operated MCP server that integrates the assistant with internal third-party services. Poses risks if misconfigured or inadequately secured, including unauthorized data access, insecure API exposure, and privilege escalation through service integrations.
 
-- **RAG (local/Remote)**  
-  A component that dynamically fetches relevant content from available data sources to augment the model's context and improve response quality. Introduces risks around ingestion of untrusted or manipulated content, exposure of sensitive data through retrieval, and injection of malicious inputs that propagate into model outputs.
+- **Local RAG**  
+  A component, hosted locally, that dynamically fetches relevant content from available data sources to augment the model's context and improve response quality. Introduces risks around ingestion of untrusted or manipulated content, exposure of sensitive data through retrieval, and injection of malicious inputs that propagate into model outputs.
 
-- **MCP Server — Cloud Service (e.g. AWS, GCP)**  
+- **Remote RAG**  
+  A component, hosted remotely, that dynamically fetches relevant content from available data sources to augment the model's context and improve response quality. Introduces risks around ingestion of untrusted or manipulated content, exposure of sensitive data through retrieval, and injection of malicious inputs that propagate into model outputs.
+  
+- **MCP Server — Cloud Service**  
   A vendor-operated MCP server that integrates the assistant with external cloud platforms and services. Introduces supply chain risks including vulnerable or malicious dependencies, excessive permissions, and potential exfiltration of data passed through the integration.
 
-- **MCP Server — Agentic SaaS (e.g. Claude Code)**
+- **MCP Server — Agentic SaaS**
   The MCP server component hosted within the Agentic SaaS platform, responsible for exposing assistant capabilities and orchestrating downstream agent, model, and retrieval components. A high-value target due to its central role—risks include unauthorized access, data interception, and abuse of its broad orchestration capabilities.
 
 - **MCP Gateway**
@@ -78,7 +84,7 @@ Data at rest or data in motion
 ### Platform
 
 - **External Plugin Marketplace**  
-  A third-party platform where developers discover and install IDE plugins or extensions—introduces supply chain risks such as malicious or vulnerable plugins, insufficient vetting, and potential for unauthorized data access or exfiltration.
+  An externally operated third-party platform where developers discover and install IDE plugins or extensions—introduces supply chain risks such as malicious or vulnerable plugins, insufficient vetting, and potential for unauthorized data access or exfiltration.
 
 - **Agentic SaaS**
   An externally operated platform that delivers agentic assistant capabilities as a managed service. Introduces risks related to third-party data handling, limited visibility into model behavior and data flows, dependency on external availability, and reduced control over security posture.
@@ -90,11 +96,14 @@ Data at rest or data in motion
 
 ### Machine-Learning-Model
 
-- **Code Assistant Model (local/Remote)**  
-  The core AI model that generates responses or code suggestions. May run locally (e.g., a self-hosted model) or remotely (e.g., a cloud-hosted model such as a 30B-parameter model). Relevant in threat modeling due to risks like prompt injection, data leakage, model manipulation, and insecure output generation. This is a component within the Agent.
+- **Local Code Assistant Model**  
+  The core AI model that generates responses or code suggestions. Run locally (e.g., a self-hosted model). Relevant in threat modeling due to risks like prompt injection, data leakage, model manipulation, and insecure output generation. This is a component within the Agent.
+
+- **Remote Code Assistant Model**  
+  The core AI model that generates responses or code suggestions. Run remotely (e.g., a cloud-hosted model such as a 30B-parameter model). Relevant in threat modeling due to risks like prompt injection, data leakage, model manipulation, and insecure output generation. This is a component within the Agent.
 
 ## Sub Use Case 1a:
-  The developer's workstation hosts the full agentic framework, including the dynamic agent, model, RAG, and context store. The assistant plugin communicates directly with locally running components, with MCP servers bridging internal third-party services and external cloud platforms.
+The developer's workstation hosts the full agentic framework, including the dynamic agent, model, RAG, and context store. The assistant plugin communicates directly with locally running components, with MCP servers bridging internal third-party services and external cloud platforms.
 
 ```
 Internal
