@@ -1,4 +1,4 @@
-## Use Case: Code Assistant
+# Use Case: Code Assistant
 
 This README provides concise definitions of key components and concepts used in threat modeling diagram.
 
@@ -6,9 +6,9 @@ Diagram (draw.io): ![Diagram](./diagram/ai_code_generator_threat_model_diagram_u
 
 [Edit this diagram (draw.io XML)](./diagramm/ai_code_generator_threat_model_diagram_updated_2026_05_12.drawio)
 
-The following taxonomy is aligned to CycloneDX 1.7/2.0+ (https://cyclonedx.org/docs/1.7/json/#metadata_tools_oneOf_i0_components_items_type).
+The following taxonomy is aligned to [CycloneDX 1.7/2.0+](https://cyclonedx.org/docs/1.7/json/#metadata_tools_oneOf_i0_components_items_type).
 
-### Parties/Roles (Actors)
+## Parties/Roles (Actors)
 
 Humans or services that take action
 
@@ -21,9 +21,9 @@ Humans or services that take action
 - **Code Assistant Agent (Dynamic Code) (local/Remote)**
   An AI model within the agentic framework that combines reasoning and tool interaction capabilities to orchestrate multi-step workflows, invoke external services, and coordinate with the broader agent ecosystem. In threat modeling it is treated as an active actor with an expanded blast radius relative to its static counterpart—its autonomous, multi-tool operation makes it susceptible to prompt injection, workflow hijacking, and cascading misuse of integrated systems.
 
-### Components
+## Components
 
-#### Groups
+### Groups
 
 Used to describe the control zones of an organization relative to the usecases of the org.
 
@@ -33,7 +33,7 @@ Used to describe the control zones of an organization relative to the usecases o
 - **External**  
   Third-party systems or services outside the organization’s control (e.g., SaaS, APIs, cloud providers)—introduce additional risks including supply chain vulnerabilities, data exposure, and limited visibility or control over security practices.
 
-#### Data
+### Data
 
 Data at rest or data in motion
 
@@ -43,18 +43,16 @@ Data at rest or data in motion
 - **Local codebase clone**  
   A developer’s local copy of a repository—treated as a sensitive asset since it may contain proprietary code, secrets, or configurations that could be exposed if the endpoint is compromised.
 
-- **Context**
-  TBC
+- **Context Store (local/Remote)**  
+  A data store that supplies structured or unstructured content to the model or retrieval pipeline to enrich responses. Risks include unauthorized access to sensitive stored content, poisoning of the data corpus, and data leakage via model outputs.
 
 - **RAG data**
   TBC
 
-#### Applications
+### Applications
 
 - **IDE (Integrated Development Environment)**  
   The software environment (e.g., VS Code, IntelliJ) where code is written and tested—an attack surface due to risks like malicious extensions, insecure settings, or credential exposure.
-
-#### TBC
 
 - **Authentication (Authn)**  
   The service for verifying the identity of a user or system (e.g., passwords, tokens, MFA)—risks include credential theft, weak authentication mechanisms, and session hijacking.
@@ -65,35 +63,37 @@ Data at rest or data in motion
 - **MCP Server — Third Party Service (e.g. Jira, GitHub)**
   An organization-operated MCP server that integrates the assistant with internal third-party services. Poses risks if misconfigured or inadequately secured, including unauthorized data access, insecure API exposure, and privilege escalation through service integrations.
 
-- **External Plugin Marketplace**  
-  A third-party platform where developers discover and install IDE plugins or extensions—introduces supply chain risks such as malicious or vulnerable plugins, insufficient vetting, and potential for unauthorized data access or exfiltration.
-
-- **Agentic Framework**  
-  The orchestration layer that coordinates multi-step, tool-using workflows on behalf of the assistant. Manages execution flow between the model, retrieval systems, and external services—a high-impact trust boundary where prompt injection, tool misuse, or unintended action chains can have significant consequences.
-
-- **Code Assistant Model (local/Remote)**  
-  The core AI model that generates responses or code suggestions. May run locally (e.g., a self-hosted model) or remotely (e.g., a cloud-hosted model such as a 30B-parameter model). Relevant in threat modeling due to risks like prompt injection, data leakage, model manipulation, and insecure output generation. This is a component within the Agent.
-
-- **Context Store (local/Remote)**  
-  A data store that supplies structured or unstructured content to the model or retrieval pipeline to enrich responses. Risks include unauthorized access to sensitive stored content, poisoning of the data corpus, and data leakage via model outputs.
-
 - **RAG (local/Remote)**  
   A component that dynamically fetches relevant content from available data sources to augment the model's context and improve response quality. Introduces risks around ingestion of untrusted or manipulated content, exposure of sensitive data through retrieval, and injection of malicious inputs that propagate into model outputs.
 
 - **MCP Server — Cloud Service (e.g. AWS, GCP)**  
   A vendor-operated MCP server that integrates the assistant with external cloud platforms and services. Introduces supply chain risks including vulnerable or malicious dependencies, excessive permissions, and potential exfiltration of data passed through the integration.
 
+- **MCP Server — Agentic SaaS (e.g. Claude Code)**
+  The MCP server component hosted within the Agentic SaaS platform, responsible for exposing assistant capabilities and orchestrating downstream agent, model, and retrieval components. A high-value target due to its central role—risks include unauthorized access, data interception, and abuse of its broad orchestration capabilities.
+
 - **MCP Gateway**
   The ingress service (e.g., proxy, API gateway, or firewall) that receives and routes inbound connections to the assistant backend. Acts as a perimeter trust boundary—misconfiguration or compromise can expose backend infrastructure to unauthorized access or traffic manipulation.
+
+### Platform
+
+- **External Plugin Marketplace**  
+  A third-party platform where developers discover and install IDE plugins or extensions—introduces supply chain risks such as malicious or vulnerable plugins, insufficient vetting, and potential for unauthorized data access or exfiltration.
 
 - **Agentic SaaS**
   An externally operated platform that delivers agentic assistant capabilities as a managed service. Introduces risks related to third-party data handling, limited visibility into model behavior and data flows, dependency on external availability, and reduced control over security posture.
 
-- **MCP Server — Agentic SaaS (e.g. Claude Code)**
-  The MCP server component hosted within the Agentic SaaS platform, responsible for exposing assistant capabilities and orchestrating downstream agent, model, and retrieval components. A high-value target due to its central role—risks include unauthorized access, data interception, and abuse of its broad orchestration capabilities.
+### Framework
 
+- **Agentic Framework**  
+  The orchestration layer that coordinates multi-step, tool-using workflows on behalf of the assistant. Manages execution flow between the model, retrieval systems, and external services—a high-impact trust boundary where prompt injection, tool misuse, or unintended action chains can have significant consequences.
 
-### Sub Use Case 1a:
+### Machine-Learning-Model
+
+- **Code Assistant Model (local/Remote)**  
+  The core AI model that generates responses or code suggestions. May run locally (e.g., a self-hosted model) or remotely (e.g., a cloud-hosted model such as a 30B-parameter model). Relevant in threat modeling due to risks like prompt injection, data leakage, model manipulation, and insecure output generation. This is a component within the Agent.
+
+## Sub Use Case 1a:
   The developer's workstation hosts the full agentic framework, including the dynamic agent, model, RAG, and context store. The assistant plugin communicates directly with locally running components, with MCP servers bridging internal third-party services and external cloud platforms.
 
 ```
@@ -117,7 +117,7 @@ External B
     └── Cloud Service (e.g. AWS, GCP)
 ```
 
-### Sub Use Case 1b:
+## Sub Use Case 1b:
   The agentic framework is offloaded to an external SaaS platform, which hosts the dynamic agent, model, RAG, and context store behind an MCP Gateway. The workstation retains the plugin and static agent, with MCP servers connecting to both internal third-party services and external cloud platforms.
 
 ```
@@ -148,7 +148,7 @@ External B
 ```
 
 
-### CycloneDX v1.7 — Code Assistant Threat Model BOM
+## CycloneDX v1.7 — Code Assistant Threat Model BOM
 
 ```json
 {
@@ -427,5 +427,6 @@ External B
       ]
     }
   ]
+
 }
 ```
